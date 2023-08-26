@@ -1,0 +1,113 @@
+1. Git version
+	git --version
+	
+2. Register user with git
+	git config --global user.name "your-git-user-name"
+	git config --global user.email "your-git-email"
+
+3. See config list
+	git config --list
+	
+4. Creates a local repository
+	git init
+	
+5. Make copy of remote repo on local machine
+
+	git clone <remote-repo-clone-link>
+	
+6. Forking : This creates a copy of the repository of other user( example : public repo or other user repo) in your account 
+
+7. Adding file to staging area
+	git add file1.txt file2.txt file3.txt
+	git add . (To add all files)
+	
+8. Show the state of changes in your working directory and staging area
+	git status
+	
+9. Save changes to repository
+	git commit -m "Your commit message here"
+	
+	
+10. Show you the differences in the repository that haven't been staged (i.e., changes you've made but haven't yet run git add on) | code of your working space that has not been staged yet
+	git diff
+	
+11. To see what differences have been staged but not yet committed (i.e., changes that are ready to be committed on the next git commit)
+	git diff --cached
+	git diff --staged
+
+12. Differences Between Commits: You can compare two specific commits by referencing their commit hashes:
+	git diff commit_hash1 commit_hash2
+
+13. Differences Between Branches: Similarly, you can compare branches:
+	git diff branch1..branch2
+
+14. Differences in a Specific File: If you're only interested in the changes made to a particular file, you can specify the file name:
+	git diff path/to/file.txt
+
+15. Shows the differences between your working directory and the latest commit (HEAD)
+	git diff HEAD
+	
+16. Displays information about a specific object, usually a commit. By default, if executed without any object specified, it will show details about the most recent commit (HEAD)
+	git show
+	
+17. Specific Commit: You can use git show followed by a specific commit hash to display information about that particular commit
+	git show <specific-commit>
+	
+18. Display a log of commits for the branch you're currently on.
+	git log
+	
+19. Limiting Output: If you only want to see a specific number of latest commits, you can use a number as an argument
+	git log -5 => will show the last five commits.
+	
+20. Graph View: The command git log --graph shows a textual graph of commits and branches, which is especially useful for visualizing branch and merge history
+	git log --graph
+	
+21. To remove a file from your working directory and also stage the removal
+	git rm filename.txt
+
+22. Removing from the Staging Area Only: If you want to remove a file from the Git repository but keep it in your working directory (i.e., no longer track the file but also don't delete it),
+	git rm --cached filename.txt
+
+23. Removing Directories: To recursively remove files in a directory (and the directory itself):
+	git rm -r directoryname/
+
+24. Forcing Removal: If you've made changes to a file and haven't committed those changes, Git will prevent accidental removal of that file. If you're sure about the removal, you can force it with:
+	git rm -f filename.txt
+
+25. Show current branch
+	git branch
+	
+26. Creating a Branch: You can create a new branch using below command. This creates the branch but does not switch to it and contains all code of current branch. 
+	git branch branch_name
+	
+27. Deleting a Branch:
+	a. To delete a branch locally, use git branch -d branch_name. This will safely delete the branch (i.e., only if its changes are already present in the current or other branches).
+		branch -d branch_name
+		
+	b. If you want to force delete a branch, regardless of its state, use git branch -D branch_name
+		git branch -D branch_name
+		
+28. Renaming a Branch:
+	a. To rename the current branch, use git branch -m new_branch_name.
+		git branch -m new_branch_name
+	
+	b. To rename a branch that you are not currently on, use git branch -m old_branch_name new_branch_name.
+		git branch -m old_branch_name new_branch_name
+		
+29. List all branch
+	git branch --list
+
+30. Switching Between Branches: You can switch to an existing branch using the command: git checkout branch_name. When executed, it changes the HEAD to point to the specified branch and updates the working 	directory to match the content of that branch.
+	git checkout branch_name
+	
+31. Creating a New Branch and Switching to It:You can create a new branch and immediately switch to it by using the -b flag.
+	git checkout -b new_branch_name
+	
+32. Detached HEAD State: You can also checkout a specific commit by using its commit hash: git checkout commit_hash. When you do this, you're not on a named branch anymore, but instead on a specific commit. This state is called a "detached HEAD" state. It's useful for exploring the repository's state at a particular point in history, but you should be cautious when making changes in this state. If you do make changes, it's a good idea to create a new branch to save those changes.
+	git checkout commit_hash
+	
+		
+
+	
+
+
