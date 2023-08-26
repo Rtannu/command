@@ -1,0 +1,74 @@
+Docker Command ::
+
+1.Docker verion : 
+	docker -v | docker --version | Get docker info :  docker info 
+
+2.Image list : 
+	sudo docker images
+
+3.Pull docker image : 
+	docker pull [image-name]
+	
+4.Search image : 
+	docker search [image-name]
+	
+5.Run docker image : 
+	docker run [image-name]
+	
+6.See running docker image / container : 
+	docker ps -a
+	
+7.Details information of container / image : 
+	docker inspect [image-name/container-id]
+	
+8. Remove images : 
+	docker rmi <image_name>:<tag>
+	
+9.Stop container : 
+	docker stop <container_id_or_name>
+	
+10.Start / Restart container : 
+	docker start / restart <container_id_or_name>
+	
+11.To See running container : 
+	docker ps
+	
+12.To see running and stoped container : 
+	docker ps -a
+	
+13.Remove container : 
+	docker rm [OPTIONS] CONTAINER_ID_OR_NAME
+	
+14.Remove multiple container : 
+	docker rm container_id_1 container_id_2 container_id_3
+	
+15.Remove all stoped container : 
+	docker container prune
+	
+16.Run container in detached(-d) | interactive mode (it) mode : 
+	docker run -d IMAGE_NAME  | docker run -it IMAGE_NAME 
+	
+17.Command to check log : 
+	docker logs [OPTIONS] CONTAINER_ID_OR_NAME
+	
+18.Command to check real time log : 
+	docker logs -f <container-id>
+
+19.Build image from docker file(spring boot) : 
+	docker build -t [name:tag]  <path/to/Dockerfile> 
+	docker build -t docker-spring-boot .
+	
+20.Run build image in deatched mode : 
+	docker run -d -p [host_port]:[container_port] –-name [container_name] [image_id/image_tag]
+	docker run -d -p 8080:8080 --name springdocker docker-spring-boot
+	
+21. Run build image in interactive mode : 
+	docker run -it -p [host_port]:[container_port] –-name [container_name] [image_id/image_tag] 
+	docker run -it -p 8080:8080 --name springdocker docker-spring-boot
+	
+22. Save image on local : 
+	docker save -o OUTPUT_FILE IMAGE_NAME
+	docker save -o myapp_image.tar myapp
+
+23. Load on docker host : 
+	docker load -i myapp_image.tar
