@@ -72,3 +72,31 @@ Docker Command ::
 
 23. Load on docker host : 
 	docker load -i myapp_image.tar
+	
+	
+	
+	
+Docker Image : Docker image is class / blue print
+Docker Container : Docker container is object of Docker Image. 
+		   Running phase of image is docker container. 
+=>>>>> To use a programming metaphor, if an image is a class, then a container is an instance of a class—a runtime object
+=>>>>> Images are created with the build command, and they'll produce a container when started with run
+
+
++------------+  docker build   +--------------+  docker run -dt   +-----------+  docker exec -it   +------+
+| Dockerfile | --------------> |    Image     | --------------->  | Container | -----------------> | Bash |
++------------+                 +--------------+                   +-----------+                    +------+
+                                 ^
+                                 | docker pull
+                                 |
+                               +--------------+
+                               |   Registry   |
+                               +--------------+
+                               
+Dockerfile → (Build) → Image → (Run) → Container.
+
+Dockerfile: contains a set of Docker instructions that provisions your operating system the way you like, and installs/configure all your software.
+
+Image: compiled Dockerfile. Saves you time from rebuilding the Dockerfile every time you need to run a container. And it's a way to hide your provision code.
+
+Container: the virtual operating system itself. You can ssh into it and run any commands you wish, as if it's a real environment. You can run 1000+ containers from the same Image.
