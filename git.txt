@@ -106,6 +106,8 @@
 32. Detached HEAD State: You can also checkout a specific commit by using its commit hash: git checkout commit_hash. When you do this, you're not on a named branch anymore, but instead on a specific commit. This state is called a "detached HEAD" state. It's useful for exploring the repository's state at a particular point in history, but you should be cautious when making changes in this state. If you do make changes, it's a good idea to create a new branch to save those changes.
 	git checkout commit_hash
 	
+	raj
+	
 		
 
 	
