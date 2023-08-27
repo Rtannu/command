@@ -106,7 +106,193 @@
 32. Detached HEAD State: You can also checkout a specific commit by using its commit hash: git checkout commit_hash. When you do this, you're not on a named branch anymore, but instead on a specific commit. This state is called a "detached HEAD" state. It's useful for exploring the repository's state at a particular point in history, but you should be cautious when making changes in this state. If you do make changes, it's a good idea to create a new branch to save those changes.
 	git checkout commit_hash
 	
-	raj
+33. Reverting Changes in the Working Directory: If you've modified a file and didn't add and want to discard those changes.
+	git checkout filename.txt
+
+34. Used to revert changes made to all files in the current directory (and its subdirectories) in your working directory back to their state in the last commit. Essentially, it discards any local modifications you haven't yet committed or haven't yet added in stage
+	git checkout .
+	
+35. Undo git pull, how to bring repos to old state
+	git merge --abort
+	git reset --merge
+	git reset --hard (danger)
+	
+36. Takes a commit hash and applies that commit's changes as a new commit on your current branch.
+	git cherry-pick <commit-hash> (For one commit)
+	git cherry-pick <commit1-hash> <commit2-hash> ... (For multiple commits)
+	
+
+***************************************************************************** GIT LOG VS GIT REFLOG *********************************************************************************************
+`git log` and `git reflog` are both commands in Git that display information about the commit history, but they serve different purposes and provide different views of the repository's history. Here's a comparison of the two:
+
+1. Nature of Display:
+   - git log: Shows a list of commits in the branch history. It displays commits in a linear fashion (or a tree view, if there have been branches and merges) based on the actual commit history.
+   - git reflog: Displays a list of actions (or movements) of the `HEAD` pointer in the repository. It's more like a log of where `HEAD` and branch tips have been pointing over time.
+
+2. Purpose:
+   - git log: Used for understanding the history of commits in the repository – who committed what and when.
+   - git reflog: Useful for recovery scenarios. If you mistakenly move or delete a commit, the reflog can help you find it and restore it.
+
+3. Entries:
+   - git log: Only contains commits.
+   - git reflog: Contains other entries like resets, rebase operations, checkouts, etc., not just commits.
+
+4. Scope:
+   - git log: Displays history specific to the current branch (or another branch if specified).
+   - git reflog: Shows a local history of the entire repository, regardless of branches. It's specific to your local machine. They are not shared with collaborators.
+
+5. Retention:
+   - git log: Retains commits as long as they are part of the repository history and haven't been garbage collected (for instance, after being orphaned by certain operations like a hard reset).
+   - git reflog: Entries are temporary and are usually retained for 30 days (for reachable commits) or 90 days (for unreachable commits).
+
+6. Shared vs. Local:
+   - git log: The commit history seen in `git log` is consistent across all clones of the repository (unless they are ahead or behind in sync).
+   - git reflog: The reflog is local to your specific Git repository. If someone else clones the repository or if you clone it to a different location, the reflog in the new clone will start afresh.
+
+In essence, while both `git log` and `git reflog` deal with the history of a repository, `git log` provides a straightforward commit history, while `git reflog` provides a more detailed action history useful for understanding how you've interacted with your repository and for recovering lost commits or changes.
+	
+***************************************************************************** GIT STASH *********************************************************************************************
+
+`git stash` is a command in Git that allows you to temporarily save changes that you don't want to commit immediately. It's essentially a way to "shelve" changes, giving you a clean working directory. This can be particularly useful when you need to switch context, like moving to a different branch to handle an urgent bug fix, but you aren't ready to commit your current work on the existing branch.
+
+Here's a closer look at `git stash`:
+
+1. Functionality: The `git stash` command takes your modified tracked files and staged changes, saves them away for later use, and then reverts them, leaving you with a clean working directory.
+
+2. Multiple Stashes: You can have multiple stashes. Each time you use `git stash`, it's added to a stack of stashes that you can reapply later.
+
+3. Usage:
+
+   - Stashing Changes: 
+     git stash : This will stash your changes and give them a default message indicating the branch and commit you were on.
+
+   - Stashing with a Message: To make it easier to remember the context of the changes:
+     git stash save "your custom message here"
+     
+
+   - Listing Stashes: You can see a list of all your stashes with:
+     git stash list
+
+   - Applying a Stash: This will apply the most recent stash and keep it in the stash list:
+     git stash apply
+
+     If you want to apply a specific stash, you can use:
+     git stash apply stash@{n}
+     Where `n` is the stash number (e.g., `stash@{0}`, `stash@{1}`, etc.).
+
+   - Dropping a Stash: To remove a stash after applying or if you no longer need it:
+     git stash drop stash@{n}
+
+   - Popping a Stash: This command will apply the stash and immediately drop it from the list:
+     git stash pop
+
+   - Clearing All Stashes: To remove all stashed entries:
+     git stash clear
+
+4. Branching with Stashes: If you have changes in a stash that were made in one branch, and they are better suited for a new branch, you can use:
+   git stash branch new_branch_name
+   This will create a new branch, check it out, apply the stash, and then drop the stash (if applied successfully).
+
+5. Handling Conflicts: Just like with merges, applying a stash can result in conflicts. If there's a conflict, Git will let you know, and you'll need to resolve it manually.
+
+
+	
+
+
+
+
+***************************************************************************** GIT FETCH VS GIT PULL *********************************************************************************************
+git fetch:
+
+Function: It communicates with the remote repository and fetches any new changes, like new branches or updates to existing branches. However, it does not automatically update the local working directory to reflect those changes.
+
+Result: After a git fetch, you'll have references to all the new branches and updates in your local repository (usually under origin/branch_name for the fetched branches). If you want to switch to a branch you've fetched, you'd typically use git checkout or merge it into your current branch using git merge.
+
+Safety: It's considered a safe operation as it doesn't modify the working directory. You can fetch updates and look at them without making any changes to your current branch.
+
+git pull:
+
+Function: Essentially, git pull is a combination of git fetch followed by git merge. It fetches the changes from the remote repository and then immediately applies those changes to the current branch in the local working directory.
+
+Result: Your current branch will be updated to reflect the changes from the remote branch you're tracking (typically the same named branch on the remote).
+
+git pull = git fetch + git merge
+
+
+
+***************************************************************************** GIT MERGE VS GIT REBASE *********************************************************************************************
+Both `merge` and `rebase` are used in Git to integrate changes from one branch into another. However, they do so in fundamentally different ways and result in different branch histories. Here's a detailed breakdown of the differences:
+
+1. Purpose:
+   - Merge: Combines the divergent lines of development into a single branch. This creates a new commit in the branch's history.
+   - Rebase: Applies the changes from the branch you're currently on onto another branch. It effectively moves the entire branch to begin on the tip of the other branch, giving the appearance of a linear history.
+
+2. Commit History:
+   - Merge: Maintains the context of the branch by keeping branch history. Creates a new merge commit that has two parent commits, preserving a bifurcating history.
+   - Rebase: Creates a linear history by replaying commits from the current branch onto the target branch. This can simplify history but modifies existing commits, resulting in new SHA-1 values for the rebased commits.
+
+3. Conflict Resolution:
+   - Merge: Conflicts are resolved in a single merge commit.
+   - Rebase: Conflicts are resolved commit-by-commit as each change is replayed onto the target branch.
+
+4. Use Case:
+   - Merge: Suitable when you want to integrate changes from one branch (like a feature branch) into another (like the main branch), and you want to retain a record of branches merging.
+   - Rebase: Suitable when you're working on a feature branch and want to incorporate the latest changes from the main branch without a merge commit. Also useful when cleaning up commit history before integrating into a main branch.
+
+5. Safety and Modifying History:
+   - Merge: Safe. Does not modify existing commits.
+   - Rebase: Potentially unsafe. Modifies existing commits, which can be problematic if others are working on the same branch. It's a rewrite of history.
+
+6. Visual Representation:
+   - Merge: If visualized on a graph, it will show branches merging together with a distinct merge commit node.
+   - Rebase: Provides a cleaner, linear history. All commits appear in a single line when visualized on a graph.
+
+7. Command Example:
+   - Merge: `git merge feature-branch`
+   - Rebase: `git rebase main-branch`
+
+Recommendation:
+- If collaborating with others, avoid rebasing branches that have been pushed publicly, as it rewrites history. Instead, use merging. If you wish to use rebase for a cleaner history, ensure you coordinate with your team and understand the consequences.
+
+
+***************************************************************************** GIT REVERT VS GIT RESET *********************************************************************************************
+Both `git revert` and `git reset` are commands in Git that help in undoing changes, but they operate in fundamentally different ways and are used in different scenarios. Here's a detailed comparison:
+
+1. Operation:
+   - git revert: Creates a new commit that undoes the changes made in a specific commit or a range of commits. The commit(s) you're reverting remains in the history.
+   - git reset: Moves the current branch pointer (like `HEAD`) back to a previous commit. Depending on the mode used, it can also change the staging area and/or the working directory.
+
+2. Commit History:
+   - git revert: Does not rewrite commit history. By adding a new commit to undo changes, the branch's history remains intact.
+   - git reset: Can rewrite commit history. If you reset to a previous commit, subsequent commits will no longer be referenced by the branch.
+
+3. Modes:
+   - git revert: Doesn’t have modes.
+   - git reset: Has three primary modes:
+     - `--soft`: Moves the branch pointer but leaves the staging area and working directory untouched.
+     - `--mixed` (default): Moves the branch pointer and resets the staging area, but leaves the working directory untouched.
+     - `--hard`: Moves the branch pointer, resets the staging area, and resets the working directory.
+
+4. Collaboration:
+   - git revert: Safe to use on public branches since it does not rewrite history. If you revert a change and push it, other collaborators can simply pull the branch to get the update.
+   - git reset: Risky on public/shared branches. If you reset and then push a branch that others are working on, they will face issues because the commit history has been rewritten. They will have to forcefully synchronize their branch, which can lead to further complications.
+
+5. Use Case:
+   - git revert: Ideal when you need to undo changes in a shared/public branch without disrupting the commit history.
+   - git reset: Useful in local branches when you need to undo commits or "unstage" changes. It's also used for scenarios like correcting a commit message, squashing commits, or entirely discarding changes.
+
+6. Command Usage:
+   - git revert: 
+     - To undo a specific commit but doesn't remove commit from history and add new commit with revert message : `git revert <commit-hash>`
+     - To undo a specific commit but doesn't remove commit from history and don't add new commit with revert message. you have to commit manually : `git revert -n <commit-hash>`
+     - To undo a range of commits: `git revert <older-commit-hash>..<newer-commit-hash>`
+   - **git reset**:
+     - To move to a specific commit and leave files as they are: `git reset --soft <commit-hash>`
+     - To move to a commit and reset the staging area: `git reset (or) git reset --mixed <commit-hash>`
+     - To move to a commit and reset(remove all previous commit) everything (WARNING: this will discard changes): `git reset --hard <commit-hash>`
+
+In conclusion, while both commands offer ways to undo changes, the method and implications are different. `git revert` is safer for collaborative projects, whereas `git reset` is powerful but should be used with caution, especially in collaborative environments.
+
 	
 		
 
